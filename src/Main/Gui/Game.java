@@ -2,6 +2,8 @@ package Main.Gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -32,12 +34,19 @@ public class Game extends Canvas implements Runnable{
             b1.setBounds(15 + i * 65, 460, 32, 32);
             b1.setFont(new Font("Arial", Font.BOLD, 25));
             b1.setMargin(new Insets(0, 0, 0, 0));
-            b1.setFocusable(true);
+            b1.setFocusable(false);
             b1.setFocusPainted(false);
             buttons.add(b1);
         }
         screen = new Screen(width, height);
         buttons.forEach(frame::add);
+        buttons.forEach(b ->
+                b.addActionListener(e ->
+                        System.out.println("@ziadElAbd"
+                                + new Random().nextInt()
+                        )
+                )
+        );
     }
     public void set(Thread thread){
         this.thread = thread;
