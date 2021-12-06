@@ -17,9 +17,14 @@ public class MinMax {
         }
     }
 
+    // tree nodes to be printed 
     private ArrayList<treeNode> tree = new ArrayList<>();
+
+    // map each state to its best cost 
     private HashMap<String, Integer> vis = new HashMap<>();
-    private static int whichCol;
+
+    // the best move selected by the algorithm
+    private static int[][] bestMove ; 
 
     private int solve(int[][] state, int depth, boolean maxPlayer) {
 
@@ -41,7 +46,7 @@ public class MinMax {
                 int cost = solve(nextState, depth - 1, false);
                 if (cost > res) {
                     res = cost;
-                    whichCol = i;
+                    bestMove = copyState(nextState) ;
                 }
             }
 
@@ -54,10 +59,11 @@ public class MinMax {
                 int cost = solve(nextState, depth - 1, true);
                 if (cost < res) {
                     res = cost;
-                    whichCol = i;
+                    bestMove = copyState(nextState) ; 
                 }
             }
         }
+        
         vis.put(stateAsString, res);
         return res;
 
@@ -105,8 +111,8 @@ public class MinMax {
         return this.tree;
     }
 
-    public int solveAPI(int[][] state, int depth, boolean maxPlayer) {
+    public int[][] solveAPI(int[][] state, int depth, boolean maxPlayer) {
         solve(state, depth, maxPlayer);
-        return whichCol;
+        return bestMove ; 
     }
 }
