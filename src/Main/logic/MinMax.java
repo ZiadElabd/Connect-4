@@ -1,7 +1,10 @@
 package Main.logic;
 
+import Main.logic.Heuristic;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.sound.midi.Soundbank;
 
 public class MinMax {
 
@@ -17,19 +20,19 @@ public class MinMax {
         }
     }
 
-    // tree nodes to be printed 
+    // tree nodes to be printed
     private ArrayList<treeNode> tree = new ArrayList<>();
 
-    // map each state to its best cost 
+    // map each state to its best cost
     private HashMap<String, Integer> vis = new HashMap<>();
 
     // the best move selected by the algorithm
-    private static int[][] bestMove ; 
+    private static int bestMove;
 
     private int solve(int[][] state, int depth, boolean maxPlayer) {
 
         if (depth == 0 || isTerminal(state))
-            return -1; // return heurisitic
+            return Heuristic.h(state);
 
         String stateAsString = stateGenerator(state);
         if (vis.containsKey(stateAsString))
@@ -44,10 +47,8 @@ public class MinMax {
                 if (nextState == null)
                     continue;
                 int cost = solve(nextState, depth - 1, false);
-                if (cost > res) {
+                if (cost > res)
                     res = cost;
-                    bestMove = copyState(nextState) ;
-                }
             }
 
         } else {
@@ -59,11 +60,11 @@ public class MinMax {
                 int cost = solve(nextState, depth - 1, true);
                 if (cost < res) {
                     res = cost;
-                    bestMove = copyState(nextState) ; 
+                    bestMove = i;
                 }
             }
         }
-        
+
         vis.put(stateAsString, res);
         return res;
 
@@ -113,6 +114,28 @@ public class MinMax {
 
     public int[][] solveAPI(int[][] state, int depth, boolean maxPlayer) {
         solve(state, depth, maxPlayer);
-        return bestMove ; 
+        System.out.println(bestMove);
+        return getNextState(state, bestMove, false);
+    }
+
+    public static void main(String[] args) {
+        int[][] state = new int[6][7];
+        MinMax solver = new MinMax();
+        state[5][0] = 1 ;
+        state[5][1] = 1 ;
+        state[5][2] = 1 ;
+
+        state[5][6] = 2 ;
+        state[5][5] = 2 ;
+        state[5][4] = 2 ;
+        state[4][0] = 1 ; 
+
+        int[][] nextMove = solver.solveAPI(state,10,false);
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 7; j++)
+                System.out.print(nextMove[i][j] + " ");
+            System.out.println();
+        }
+
     }
 }
