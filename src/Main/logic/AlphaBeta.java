@@ -6,8 +6,16 @@ public class AlphaBeta {
     Heuristic heurisitic=new Heuristic();
     int bestMove;
     public int[][] slove(int[][] board,int depth){
-        int col=minmax(board,depth,Integer.MIN_VALUE,Integer.MAX_VALUE,false);
-        return nextState(board,col,false);
+        minmax(board,depth,Integer.MIN_VALUE,Integer.MAX_VALUE,false);
+        int[][] result=nextState(board,bestMove,false);
+        System.out.println("-----------");
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 7; j++) {
+                System.out.print(result[i][j]+" ");
+            }
+            System.out.println();
+        }
+        return result;
     }
     public int  minmax(int[][] board,int depth,int alpha,int beta,boolean maxPlayer){
       if (depth==0||isTermial(board)) return heurisitic.h(board);
@@ -16,7 +24,7 @@ public class AlphaBeta {
           for (int i = 0; i < 7; i++) {
               int[][] newState=nextState(board,i,maxPlayer);
               if (newState==null) continue;
-              value=Integer.max(value,minmax(newState,depth--,alpha,beta,!maxPlayer));
+              value=Integer.max(value,minmax(newState,depth-1,alpha,beta,!maxPlayer));
               alpha=Integer.max(alpha,value);
               if (alpha>=beta) break;
           }
@@ -26,7 +34,7 @@ public class AlphaBeta {
           for (int i = 0; i < 7; i++) {
               int[][] newState=nextState(board,i,maxPlayer);
               if (newState==null) continue;
-              int newValue=minmax(newState,depth--,alpha,beta,!maxPlayer);
+              int newValue=minmax(newState,depth-1,alpha,beta,!maxPlayer);
               if (newValue<value){
                   value=newValue;
                   bestMove=i;
