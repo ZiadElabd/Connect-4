@@ -19,6 +19,7 @@ public class MinMax {
 
     private ArrayList<treeNode> tree = new ArrayList<>();
     private HashMap<String, Integer> vis = new HashMap<>();
+    private static int whichCol;
 
     private int solve(int[][] state, int depth, boolean maxPlayer) {
 
@@ -35,14 +36,26 @@ public class MinMax {
             res = Integer.MIN_VALUE;
             for (int i = 0; i < 7; i++) {
                 int[][] nextState = getNextState(state, i, true);
-                res = Math.max(res, solve(nextState, depth - 1, false));
+                if (nextState == null)
+                    continue;
+                int cost = solve(nextState, depth - 1, false);
+                if (cost > res) {
+                    res = cost;
+                    whichCol = i;
+                }
             }
 
         } else {
             res = Integer.MAX_VALUE;
             for (int i = 0; i < 7; i++) {
                 int[][] nextState = getNextState(state, i, false);
-                res = Math.min(res, solve(nextState, depth - 1, true));
+                if (nextState == null)
+                    continue;
+                int cost = solve(nextState, depth - 1, true);
+                if (cost < res) {
+                    res = cost;
+                    whichCol = i;
+                }
             }
         }
         vis.put(stateAsString, res);
@@ -52,7 +65,7 @@ public class MinMax {
 
     private String stateGenerator(int state[][]) {
 
-        StringBuilder ret = new StringBuilder("") ;
+        StringBuilder ret = new StringBuilder("");
         for (int i = 0; i < 6; i++)
             for (int j = 0; j < 7; j++)
                 ret.append(Integer.toString(state[i][j]));
@@ -72,7 +85,7 @@ public class MinMax {
 
         int[][] state = copyState(curr_state);
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 5; i >= 0; i--)
             if (state[i][col] == 0) {
                 state[i][col] = maxPlayer ? 1 : 2;
                 return state;
@@ -93,6 +106,7 @@ public class MinMax {
     }
 
     public int solveAPI(int[][] state, int depth, boolean maxPlayer) {
-        return solve(state, depth, maxPlayer);
+        solve(state, depth, maxPlayer);
+        return whichCol;
     }
 }
