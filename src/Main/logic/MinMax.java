@@ -29,10 +29,33 @@ public class MinMax {
     // the best move selected by the algorithm
     private static int bestMove;
 
+    private static int[][] evaluationTable = {
+
+            { 3, 4, 5, 7, 5, 4, 3 },
+            { 4, 6, 8, 10, 8, 6, 4 },
+            { 5, 8, 11, 13, 11, 8, 5 },
+            { 5, 8, 11, 13, 11, 8, 5 },
+            { 4, 6, 8, 10, 8, 6, 4 },
+            { 3, 4, 5, 7, 5, 4, 3 } };
+
+    // here is where the evaluation table is called
+    public int evaluateContent(int[][] state) {
+        int utility = 128;
+        int sum = 0;
+        for (int i = 0; i < 6; i++)
+            for (int j = 0; j < 7; j++)
+                if (state[i][j] == 1)
+                    sum += evaluationTable[i][j];
+                else if (state[i][j] == 2)
+                    sum -= evaluationTable[i][j];
+        return utility + sum;
+    }
+
     private int solve(int[][] state, int depth, boolean maxPlayer) {
 
-        if (depth == 0 || isTerminal(state))
-            return Heuristic.h(state);
+        if (depth == 0 || isTerminal(state)) {
+            return evaluateContent(state);
+        }
 
         String stateAsString = stateGenerator(state);
         if (vis.containsKey(stateAsString))
@@ -114,23 +137,22 @@ public class MinMax {
 
     public int[][] solveAPI(int[][] state, int depth, boolean maxPlayer) {
         solve(state, depth, maxPlayer);
-        System.out.println(bestMove);
         return getNextState(state, bestMove, false);
     }
 
     public static void main(String[] args) {
         int[][] state = new int[6][7];
         MinMax solver = new MinMax();
-        state[5][0] = 1 ;
-        state[5][1] = 1 ;
-        state[5][2] = 1 ;
-
-        state[5][6] = 2 ;
-        state[5][5] = 2 ;
-        state[5][4] = 2 ;
-        state[4][0] = 1 ; 
-
-        int[][] nextMove = solver.solveAPI(state,10,false);
+        state[5][0] = 1;
+        state[4][0] = 1;
+        state[3][0] = 1;
+        state[5][1] = 1;
+        state[5][6] = 2;
+        state[5][5] = 2;
+        state[5][3] = 2;
+        state[4][1] = 1; 
+        state[4][3] = 2;
+        int[][] nextMove = solver.solveAPI(state, 9, false);
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++)
                 System.out.print(nextMove[i][j] + " ");
