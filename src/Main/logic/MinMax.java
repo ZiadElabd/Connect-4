@@ -177,6 +177,5 @@ public class MinMax {
                 System.out.print(nextMove[i][j] + " ");
             System.out.println();
         }
-
     }
 }
