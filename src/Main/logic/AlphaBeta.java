@@ -48,7 +48,7 @@ public class AlphaBeta {
     }
     private int[][] nextState(int[][] board,int col,boolean maxPlayer){
         int[][] state= copyState(board);
-        for (int i =6; i >=0; i++) {
+        for (int i =5; i >=0; i--) {
             if(state[i][col]==0){
                 state[i][col] = maxPlayer ? 1 : 2;
                 return state;
