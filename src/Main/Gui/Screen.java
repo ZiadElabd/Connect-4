@@ -1,11 +1,17 @@
 package Main.Gui;
 
 
+import Main.logic.AlphaBeta;
+import Main.logic.MinMax;
+
 public class Screen {
     public int width;
     public int height;
     public int[] pixels;
     public int[][] tiles = new int[10][9];
+    public int[][] grid = new int[6][7];
+    MinMax solver = new MinMax();
+    AlphaBeta solver_two = new AlphaBeta();
 
 
     public Screen(int width, int height) {
@@ -17,12 +23,17 @@ public class Screen {
     }
 
     public void init(){
-        int[] grid = SpriteSheet.grid.pixels;
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 7; j++) {
+                grid[i][j] = 0;
+            }
+        }
+        int[] temp_grid = SpriteSheet.grid.pixels;
         for (int y = 0; y < 10; y++) {
             for (int x = 0; x < 9; x++) {
-                if (grid[x + y * SpriteSheet.grid.width] == 0xFF2B2EFF){
+                if (temp_grid[x + y * SpriteSheet.grid.width] == 0xFF2B2EFF){
                     tiles[y][x] = -1;
-                }else if (grid[x + y * SpriteSheet.grid.width] == 0xFFFF2B1C){
+                }else if (temp_grid[x + y * SpriteSheet.grid.width] == 0xFFFF2B1C){
                     tiles[y][x] = 0;
                 }
             }
@@ -58,16 +69,35 @@ public class Screen {
         }
     }
 
-    public void update(int[][] grid){
-        if (grid.length != 6 && grid[0].length != 7){
-            System.out.println("error in the grid");
-            return;
-        }
+    public void update(){
         for (int y = 0; y < 6; y++ ) {
             for (int x = 0; x < 7; x++) {
                 tiles[y + 1][x + 1] = grid[y][x];
             }
         }
+    }
+
+    public void choose(int col){
+        int i = 0;
+        while (i < 6 && grid[i][col] == 0) i++;
+        if (i > 6 || i <= 0){
+            System.out.println("full collum");
+            return;
+        }
+        System.out.println(i - 1 +"  " + col);
+        grid[i - 1][col] = 1;
+        System.out.println("bbbbbbb");
+        for (int k1 = 0; k1 < 6; k1++) {
+            for (int k2 = 0; k2 < 7; k2++) {
+                System.out.print(grid[k1][k2] + " ");
+            }
+            System.out.println();
+        }
+        //grid = solver.solveAPI(grid, 9, false);
+        grid = solver_two.slove(grid, 9);
+        System.out.println(grid.length);
+        System.out.println(grid[0].length);
+
     }
 
 }

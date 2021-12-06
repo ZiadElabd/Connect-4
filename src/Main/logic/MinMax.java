@@ -54,7 +54,7 @@ public class MinMax {
     private int solve(int[][] state, int depth, boolean maxPlayer) {
 
         if (depth == 0 || isTerminal(state)) {
-            return evaluateContent(state);
+            return Heuristic.h(state);
         }
 
         String stateAsString = stateGenerator(state);
@@ -137,8 +137,21 @@ public class MinMax {
 
     public int[][] solveAPI(int[][] state, int depth, boolean maxPlayer) {
         solve(state, depth, maxPlayer);
-        return getNextState(state, bestMove, false);
+        int[][] f = getNextState(state, bestMove, false);
+
+        System.out.println("hhhh");
+        System.out.println(f.length);
+        System.out.println(f[0].length);
+        for (int k1 = 0; k1 < 6; k1++) {
+            for (int k2 = 0; k2 < 7; k2++) {
+                System.out.print(f[k1][k2]);
+            }
+            System.out.println();
+        }
+        System.out.println("bestmove:  " + bestMove);
+        return f;
     }
+
 
     public static void main(String[] args) {
         int[][] state = new int[6][7];
@@ -146,12 +159,18 @@ public class MinMax {
         state[5][0] = 1;
         state[4][0] = 1;
         state[3][0] = 1;
+        state[2][0] = 1;
+        state[1][0] = 1;
+        state[0][0] = 1;
         state[5][1] = 1;
-        state[5][6] = 2;
-        state[5][5] = 2;
+
         state[5][3] = 2;
-        state[4][1] = 1; 
         state[4][3] = 2;
+        state[3][3] = 2;
+        state[2][3] = 2;
+        state[1][3] = 2;
+        state[0][3] = 2;
+
         int[][] nextMove = solver.solveAPI(state, 9, false);
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++)

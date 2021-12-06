@@ -1,20 +1,21 @@
 package Main.Gui;
 
+import Main.logic.MinMax;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 
 public class Game extends Canvas implements Runnable{
     private final int width = 9 * 32;
     private final int height = 10 * 32;
     public static String title = "Connect 4 @ziadElAbd";
+
 
     private JFrame frame;
     List<JButton> buttons;
@@ -40,13 +41,10 @@ public class Game extends Canvas implements Runnable{
         }
         screen = new Screen(width, height);
         buttons.forEach(frame::add);
-        buttons.forEach(b ->
-                b.addActionListener(e ->
-                        System.out.println("@ziadElAbd"
-                                + new Random().nextInt()
-                        )
-                )
-        );
+        for (int i = 0; i < buttons.size(); i++){
+            int finalI = i;
+            buttons.get(i).addActionListener(e -> screen.choose(finalI));
+        }
     }
     public void set(Thread thread){
         this.thread = thread;
@@ -55,8 +53,13 @@ public class Game extends Canvas implements Runnable{
     @Override
     public void run() {
         while(true){
+            update();
             render();
         }
+    }
+
+    private void update(){
+        screen.update();
     }
 
 
@@ -66,17 +69,8 @@ public class Game extends Canvas implements Runnable{
             createBufferStrategy(3);
             return;
         }
-        int[][] a = new int[6][7];
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
-                a[i][j] = new Random().nextInt(3);
-            }
-        }
-        screen.update(a);
         screen.render();
-        for (int i = 0; i < pixels.length; i++) {
-            pixels[i] = screen.pixels[i];
-        }
+        System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
         Graphics g = bs.getDrawGraphics();
         g.drawImage(image,0,0,getWidth(),getHeight(),null);
         g.setColor(Color.WHITE);
