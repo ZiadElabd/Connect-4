@@ -81,7 +81,6 @@ public class Game extends Canvas implements Runnable{
     }
 
     public static void main(String[] args) {
-        System.out.println("start  now");
         int scale = 2;
         Game game = new Game(scale);
         game.frame.setResizable(false);

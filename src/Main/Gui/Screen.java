@@ -84,7 +84,6 @@ public class Screen {
             System.out.println("full collum");
             return;
         }
-        System.out.println(i - 1 +"  " + col);
         grid[i - 1][col] = 1;
         System.out.println("bbbbbbb");
         for (int k1 = 0; k1 < 6; k1++) {
