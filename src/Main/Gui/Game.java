@@ -4,11 +4,12 @@ import Main.logic.MinMax;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -20,6 +21,12 @@ public class Game extends Canvas implements Runnable{
 
     private JFrame frame;
     List<JButton> buttons;
+    JPanel panel = new JPanel();
+    JLabel l1, l2;
+    String[] types = {"MIN-MAX", "ALPHA-BETA"};
+    Integer[] depths = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    JComboBox type = new JComboBox(types);
+    JComboBox depth = new JComboBox(depths);
     private Screen screen;
     Thread thread;
 
@@ -46,6 +53,32 @@ public class Game extends Canvas implements Runnable{
             int finalI = i;
             buttons.get(i).addActionListener(e -> screen.choose(finalI));
         }
+
+        //.............................. this part need refactoring ( actually all the project )
+        l1 = new JLabel("TYPE");
+        l2 = new JLabel("DEPTH");
+        type.setVisible(true);
+        type.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                System.out.println("type value is changed");
+            }
+        });
+        depth.setVisible(true);
+        depth.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                System.out.println("depth value is changed");
+            }
+        });
+        panel.add(l1);
+        panel.add(type);
+        panel.add(l2);
+        panel.add(depth);
+        panel.setLayout(new FlowLayout());
+        panel.setBackground(Color.decode("0x5c5aea")); // e is 5
+        panel.setBounds(320, 510, 180, 70);
+        frame.add(panel);
     }
     public void set(Thread thread){
         this.thread = thread;
@@ -82,6 +115,11 @@ public class Game extends Canvas implements Runnable{
         g.drawString(screen.humanScore + " : " + screen.computerScore, 97 , 570);
         g.dispose();
         bs.show();
+    }
+
+    private void disableComponents() {
+        this.type.setEnabled(false);
+        this.depth.setEnabled(false);
     }
 
     public static void main(String[] args) {
