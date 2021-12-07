@@ -5,6 +5,7 @@ import Main.logic.AlphaBeta;
 import Main.logic.MinMax;
 
 public class Screen {
+    int humanScore = 0, computerScore = 0;
     public int width;
     public int height;
     public int[] pixels;
@@ -64,7 +65,7 @@ public class Screen {
                 if (color != 0xFFFF00FF)
                     pixels[xa + ya * width] = color;
                 else
-                    pixels[xa + ya * width] = 0xFF8A2BE2;
+                    pixels[xa + ya * width] = 0xFF5c5aea;
             }
         }
     }
@@ -85,6 +86,8 @@ public class Screen {
             return;
         }
         grid[i - 1][col] = 1;
+        humanScore = calculate_score(1);
+        System.out.println("score: " + calculate_score(1) + " " + calculate_score(2));
         System.out.println("bbbbbbb");
         for (int k1 = 0; k1 < 6; k1++) {
             for (int k2 = 0; k2 < 7; k2++) {
@@ -93,10 +96,37 @@ public class Screen {
             System.out.println();
         }
         //grid = solver.solveAPI(grid, 10, false);
-        grid = solver_two.slove(grid, 13);
+        grid = solver_two.slove(grid, 7);
+        computerScore = calculate_score(2);
+        System.out.println("score: " + calculate_score(1) + " " + calculate_score(2));
         System.out.println(grid.length);
         System.out.println(grid[0].length);
 
+    }
+    int calculate_score(int player){
+        int score = 0;
+        for (int y = 0; y < 6; y++) {
+            for (int x = 0; x < 7; x++) {
+                if (grid[y][x] == player){
+                    boolean pointX = true, pointY = true, pointZ1 = true, pointZ2 = true;
+                    for (int k = 0; k < 4; k++) {
+                        if(x + k >= 7 || grid[y][x + k] != player)
+                            pointX = false;
+                        if (y + k >= 6 || grid[y + k][x] != player)
+                            pointY = false;
+                        if (x + k >= 7 || y - k < 0 || grid[y - k][x + k] != player)
+                            pointZ1 = false;
+                        if (x + k >= 7 || y + k >= 6 || grid[y + k][x + k] != player)
+                            pointZ2 = false;
+                    }
+                    if (pointX) score++;
+                    if (pointY) score++;
+                    if (pointZ1) score++;
+                    if (pointZ2) score++;
+                }
+            }
+        }
+        return score;
     }
 
 }

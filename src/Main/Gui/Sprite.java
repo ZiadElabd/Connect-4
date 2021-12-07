@@ -12,7 +12,7 @@ public class Sprite {
     public static Sprite white = new Sprite(32 , 0 , 0 , SpriteSheet.plates);
     public static Sprite yellow = new Sprite(32 , 1 , 0, SpriteSheet.plates);
     public static Sprite red = new Sprite(32 , 2 , 0 , SpriteSheet.plates);
-    public static Sprite background = new Sprite(32, 0xFF8A2BE2);
+    public static Sprite background = new Sprite(32, 0xFF5c5aea);
 
     public Sprite(int size, int x , int y, SpriteSheet sheet) {
         this.SIZE = size;

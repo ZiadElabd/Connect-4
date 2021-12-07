@@ -8,13 +8,14 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 public class Game extends Canvas implements Runnable{
     private final int width = 9 * 32;
     private final int height = 10 * 32;
-    public static String title = "Connect 4 @ziadElAbd";
+    public static String title = "Connect 4";
 
 
     private JFrame frame;
@@ -74,8 +75,11 @@ public class Game extends Canvas implements Runnable{
         Graphics g = bs.getDrawGraphics();
         g.drawImage(image,0,0,getWidth(),getHeight(),null);
         g.setColor(Color.WHITE);
-        g.setFont(new Font("Verdana", Font.BOLD , 13));
-        g.drawString("Designed by @ziadElAbd ", 400 , 20);
+        g.setFont(new Font("Verdana", Font.BOLD , 20));
+        g.drawString("SCORE ", 80 , 530);
+        g.setFont(new Font("Verdana", Font.BOLD , 16));
+        g.drawString("Human : Computer ", 45 , 550);
+        g.drawString(screen.humanScore + " : " + screen.computerScore, 97 , 570);
         g.dispose();
         bs.show();
     }
@@ -83,6 +87,26 @@ public class Game extends Canvas implements Runnable{
     public static void main(String[] args) {
         int scale = 2;
         Game game = new Game(scale);
+//        int[][] state = new int[6][7];
+//        for (int i = 0; i < 6; i++) {
+//            Arrays.fill(state[i],0);
+//        }
+//        state[5][0] = 1;
+//        state[4][0] = 1;
+//        state[3][0] = 1;
+//        state[2][0] = 1;
+//        state[1][0] = 1;
+//        state[0][0] = 1;
+//        state[5][1] = 1;
+//        state[4][1] = 1;
+//        state[3][2] = 1;
+//        state[5][3] = 1;
+//        state[4][3] = 1;
+//        state[3][3] = 1;
+//        state[2][3] = 1;
+//        //state[5][1] = 1;
+//        game.screen.grid = state;
+//        System.out.println(game.screen.calculate_score(1));
         game.frame.setResizable(false);
         game.frame.setTitle(Game.title);
         game.frame.add(game);
