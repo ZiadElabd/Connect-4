@@ -92,8 +92,8 @@ public class Screen {
             }
             System.out.println();
         }
-        //grid = solver.solveAPI(grid, 9, false);
-        grid = solver_two.slove(grid, 10);
+        //grid = solver.solveAPI(grid, 10, false);
+        grid = solver_two.slove(grid, 13);
         System.out.println(grid.length);
         System.out.println(grid[0].length);
 

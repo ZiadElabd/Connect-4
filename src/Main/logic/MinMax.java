@@ -61,13 +61,13 @@ public class MinMax {
     private int solve(int[][] state, int depth, boolean maxPlayer) {
 
         if (depth == 0 || isTerminal(state)) {
-            return h(state);
+            return Heuristic.evaluate(state);
         }
 
         String stateAsString = stateGenerator(state);
 
         if (vis.containsKey(stateAsString))
-            return vis.get(stateAsString).score;
+          return vis.get(stateAsString).score;
 
         int res, best = -1;
 
