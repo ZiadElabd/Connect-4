@@ -3,8 +3,8 @@ package Main.logic;
 import java.util.*;
 
 public class AlphaBeta {
-    int bestMove;
     Hashtable<Integer,ArrayList<treeNode>> tree=new Hashtable<>();
+    Hashtable<String,Vistednode> visited=new Hashtable<>();
     class treeNode{
         int[][] state;
         int heuristicValue;
@@ -14,7 +14,18 @@ public class AlphaBeta {
             this.heuristicValue=maxPlayer ? Integer.MAX_VALUE : Integer.MIN_VALUE;
             this.bestMove=0;
         }
-
+    }
+    class Vistednode{
+        String stateString="";
+        int heuristicValue;
+        int bestmove;
+        public Vistednode(int[][] state,int bestmove,int heuristicValue){
+            for (int i = 0; i < 6; i++) {
+                stateString+=Arrays.toString(state[i]);
+            }
+            this.heuristicValue=heuristicValue;
+            this.bestmove=bestmove;
+        }
     }
     public int[][] slove(int[][] board,int depth){
         for (int i = 0; i <= depth; i++) {
@@ -23,7 +34,7 @@ public class AlphaBeta {
         treeNode node=new treeNode(board,true);
         minmax(node,depth,Integer.MIN_VALUE,Integer.MAX_VALUE,false,depth);
         int[][] result=nextState(board,node.bestMove,false).state;
-        /*System.out.println("-----------");
+       /* System.out.println("-----------");
         for (int i = 0; i <=depth; i++) {
             int size=tree.get(i).size();
             for (int j = 0; j <6; j++) {
@@ -46,6 +57,13 @@ public class AlphaBeta {
             node.heuristicValue=Heuristic.evaluate(node.state);
             return ;
         }
+        String stateString=stateToString(node.state);
+        if (visited.containsKey(stateString)) {
+            Vistednode temp=visited.get(stateString);
+            node.heuristicValue=temp.heuristicValue;
+            node.bestMove=temp.bestmove;
+            return;
+        }
         if(maxPlayer){
             int value=Integer.MIN_VALUE;
             for (int i = 0; i < 7; i++) {
@@ -57,6 +75,8 @@ public class AlphaBeta {
                 alpha=Integer.max(alpha,node.heuristicValue);
                 if (alpha>=beta) break;
             }
+            Vistednode vis=new Vistednode(node.state,node.bestMove,node.heuristicValue);
+            visited.put(vis.stateString,vis);
             return ;
         }else{
             int value=Integer.MAX_VALUE;
@@ -71,6 +91,8 @@ public class AlphaBeta {
                 beta=Integer.min(node.heuristicValue,beta);
                 if (alpha>=beta) break;
             }
+            Vistednode vis=new Vistednode(node.state,node.bestMove,node.heuristicValue);
+            visited.put(vis.stateString,vis);
             return ;
         }
     }
@@ -99,5 +121,12 @@ public class AlphaBeta {
             for (int j = 0; j < 7; j++)
                 ret[i][j] = state[i][j];
         return ret;
+    }
+    private String stateToString(int[][] state){
+        String stateString="";
+        for (int i = 0; i < 6; i++) {
+            stateString+=Arrays.toString(state[i]);
+        }
+        return stateString;
     }
 }
