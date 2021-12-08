@@ -74,9 +74,7 @@ public class Screen {
 
     public void update(){
         for (int y = 0; y < 6; y++ ) {
-            for (int x = 0; x < 7; x++) {
-                tiles[y + 1][x + 1] = grid[y][x];
-            }
+            System.arraycopy(grid[y], 0, tiles[y + 1], 1, 7);
         }
     }
 
