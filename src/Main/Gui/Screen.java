@@ -88,8 +88,8 @@ public class Screen {
         grid[i - 1][col] = 1;
         humanScore = calculate_score(1);
         System.out.println("score: " + calculate_score(1) + " " + calculate_score(2));
-        //grid = solver.solveAPI(grid, 10, false);
-        grid = solver_two.slove(grid, 9);
+        grid = solver.solveAPI(grid, 3, false);
+        // grid = solver_two.slove(grid, 11);
         computerScore = calculate_score(2);
         System.out.println("score: " + calculate_score(1) + " " + calculate_score(2));
 

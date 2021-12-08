@@ -37,37 +37,15 @@ public class MinMax {
     // map each state to its best cost
     private HashMap<String, node> vis = new HashMap<>();
 
-
-    private static int[][] evaluationTable = {
-            { 3, 4, 5, 7, 5, 4, 3 },
-            { 4, 6, 8, 10, 8, 6, 4 },
-            { 5, 8, 11, 13, 11, 8, 5 },
-            { 5, 8, 11, 13, 11, 8, 5 },
-            { 4, 6, 8, 10, 8, 6, 4 },
-            { 3, 4, 5, 7, 5, 4, 3 } };
-
-    public int h(int[][] state) {
-        int utility = 128;
-        int sum = 0;
-        for (int i = 0; i < 6; i++)
-            for (int j = 0; j < 7; j++)
-                if (state[i][j] == 1)
-                    sum += evaluationTable[i][j];
-                else if (state[i][j] == 2)
-                    sum -= evaluationTable[i][j];
-        return utility + sum;
-    }
-
     private int solve(int[][] state, int depth, boolean maxPlayer) {
 
-        if (depth == 0 || isTerminal(state)) {
+        if (depth == 0 || isTerminal(state))
             return Heuristic.evaluate(state);
-        }
 
         String stateAsString = stateGenerator(state);
 
         if (vis.containsKey(stateAsString))
-          return vis.get(stateAsString).score;
+            return vis.get(stateAsString).score;
 
         int res, best = -1;
 
@@ -133,10 +111,9 @@ public class MinMax {
     }
 
     private boolean isTerminal(int state[][]) {
-        for (int i = 0; i < 6; i++)
-            for (int j = 0; j < 7; j++)
-                if (state[i][j] == 0)
-                    return false;
+        for (int j = 0; j < 7; j++)
+            if (state[0][j] == 0)
+                return false;
         return true;
     }
 
@@ -145,7 +122,6 @@ public class MinMax {
     }
 
     public int[][] solveAPI(int[][] state, int depth, boolean maxPlayer) {
-        vis.clear();
         solve(state, depth, maxPlayer);
         System.out.println("best move is " + vis.get(stateGenerator(state)).best);
         return getNextState(state, vis.get(stateGenerator(state)).best, false);
