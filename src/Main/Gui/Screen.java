@@ -11,7 +11,9 @@ public class Screen {
     public int[] pixels;
     public int[][] tiles = new int[10][9];
     public int[][] grid = new int[6][7];
-    MinMax solver = new MinMax();
+    int gameType = 0;   // 0 -> minimax, 1 -> AlphaBeta
+    int depth = 0;
+    MinMax solver_one = new MinMax();
     AlphaBeta solver_two = new AlphaBeta();
 
 
@@ -87,12 +89,14 @@ public class Screen {
         }
         grid[i - 1][col] = 1;
         humanScore = calculate_score(1);
-        System.out.println("score: " + calculate_score(1) + " " + calculate_score(2));
-        //grid = solver.solveAPI(grid, 10, false);
-        grid = solver_two.slove(grid, 9);
+        if (gameType == 0) {
+            System.out.println("MINIMAX");
+            grid = solver_one.solveAPI(grid, this.depth, false);
+        } else {
+            System.out.println("ALPHABETA");
+            grid = solver_two.slove(grid, this.depth);
+        }
         computerScore = calculate_score(2);
-        System.out.println("score: " + calculate_score(1) + " " + calculate_score(2));
-
     }
     int calculate_score(int player){
         int score = 0;
