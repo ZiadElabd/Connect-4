@@ -4,64 +4,75 @@ import java.util.*;
 
 public class AlphaBeta {
     int bestMove;
-    public int[][] slove(int[][] board,int depth){
-        minmax(board,depth,Integer.MIN_VALUE,Integer.MAX_VALUE,false);
-        int[][] result=nextState(board,bestMove,false);
-        System.out.println("-----------");
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
-                System.out.print(result[i][j]+" ");
-            }
-            System.out.println();
+    Hashtable<Integer,ArrayList<treeNode>> tree=new Hashtable<>();
+    class treeNode{
+        int[][] state;
+        int heuristicValue;
+        int bestMove;
+        public treeNode(int[][] board,boolean maxPlayer){
+            this.state=board;
+            this.heuristicValue=maxPlayer ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            this.bestMove=0;
         }
+
+    }
+    public int[][] slove(int[][] board,int depth){
+        for (int i = 0; i <= depth; i++) {
+            tree.put(i,new ArrayList<>());
+        }
+        treeNode node=new treeNode(board,true);
+        minmax(node,depth,Integer.MIN_VALUE,Integer.MAX_VALUE,false,depth);
+        int[][] result=nextState(board,node.bestMove,false).state;
+       /* System.out.println("-----------");
+        for (int i = 0; i <=depth; i++) {
+            int size=tree.get(i).size();
+            for (int j = 0; j <6; j++) {
+                for (int k = 0; k < size; k++) {
+                    System.out.print(Arrays.toString(tree.get(i).get(k).state[j])+" | ");
+                }
+                System.out.println();
+            }
+            for (int k = 0; k < size; k++) {
+                System.out.print(tree.get(i).get(k).heuristicValue+" "+tree.get(i).get(k).bestMove+"                  | ");
+            }
+            System.out.println("\n"+"*******nextLevel**********");
+        }*/
         return result;
     }
-    private static int[][] evaluationTable = {
-            { 3, 4, 5, 7, 5, 4, 3 },
-            { 4, 6, 8, 10, 8, 6, 4 },
-            { 5, 8, 11, 13, 11, 8, 5 },
-            { 5, 8, 11, 13, 11, 8, 5 },
-            { 4, 6, 8, 10, 8, 6, 4 },
-            { 3, 4, 5, 7, 5, 4, 3 } };
 
-    public int h(int[][] state) {
-        int utility = 128;
-        int sum = 0;
-        for (int i = 0; i < 6; i++)
-            for (int j = 0; j < 7; j++)
-                if (state[i][j] == 1)
-                    sum += evaluationTable[i][j];
-                else if (state[i][j] == 2)
-                    sum -= evaluationTable[i][j];
-        return utility + sum;
-    }
-    public int  minmax(int[][] board,int depth,int alpha,int beta,boolean maxPlayer){
-      if (depth==0||isTermial(board)) return Heuristic.evaluate(board);
-      if(maxPlayer){
-          int value=Integer.MIN_VALUE;
-          for (int i = 0; i < 7; i++) {
-              int[][] newState=nextState(board,i,maxPlayer);
-              if (newState==null) continue;
-              value=Integer.max(value,minmax(newState,depth-1,alpha,beta,!maxPlayer));
-              alpha=Integer.max(alpha,value);
-              if (alpha>=beta) break;
-          }
-          return value;
-      }else{
-          int value=Integer.MAX_VALUE;
-          for (int i = 0; i < 7; i++) {
-              int[][] newState=nextState(board,i,maxPlayer);
-              if (newState==null) continue;
-              int newValue=minmax(newState,depth-1,alpha,beta,!maxPlayer);
-              if (newValue<value){
-                  value=newValue;
-                  bestMove=i;
-              }
-              beta=Integer.min(value,beta);
-              if (alpha>=beta) break;
-          }
-          return value;
-      }
+    public void  minmax(treeNode node,int depth,int alpha,int beta,boolean maxPlayer,int k){
+        tree.get(k-depth).add(node);
+        if (depth==0||isTermial(node.state)) {
+            node.heuristicValue=Heuristic.evaluate(node.state);
+            return ;
+        }
+        if(maxPlayer){
+            int value=Integer.MIN_VALUE;
+            for (int i = 0; i < 7; i++) {
+                treeNode newState=nextState(node.state,i,maxPlayer);
+                if (newState==null) continue;
+                minmax(newState,depth-1,alpha,beta,!maxPlayer,k);
+                value=Integer.max(node.heuristicValue,newState.heuristicValue);
+                node.heuristicValue=value;
+                alpha=Integer.max(alpha,node.heuristicValue);
+                if (alpha>=beta) break;
+            }
+            return ;
+        }else{
+            int value=Integer.MAX_VALUE;
+            for (int i = 0; i < 7; i++) {
+                treeNode newState=nextState(node.state,i,maxPlayer);
+                if (newState==null) continue;
+                minmax(newState,depth-1,alpha,beta,!maxPlayer,k);
+                if (newState.heuristicValue< node.heuristicValue){
+                    node.heuristicValue=newState.heuristicValue;
+                    node.bestMove=i;
+                }
+                beta=Integer.min(node.heuristicValue,beta);
+                if (alpha>=beta) break;
+            }
+            return ;
+        }
     }
 
     private boolean isTermial(int[][] board){
@@ -72,12 +83,12 @@ public class AlphaBeta {
         }
         return true;
     }
-    private int[][] nextState(int[][] board,int col,boolean maxPlayer){
+    private treeNode nextState(int[][] board,int col,boolean maxPlayer){
         int[][] state= copyState(board);
         for (int i =5; i >=0; i--) {
             if(state[i][col]==0){
                 state[i][col] = maxPlayer ? 1 : 2;
-                return state;
+                return new treeNode(state,maxPlayer);
             }
         }
         return null;
