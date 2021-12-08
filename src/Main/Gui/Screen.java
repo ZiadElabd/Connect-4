@@ -12,7 +12,7 @@ public class Screen {
     public int[][] tiles = new int[10][9];
     public int[][] grid = new int[6][7];
     int gameType = 0;   // 0 -> minimax, 1 -> AlphaBeta
-    int depth = 0;
+    int depth = 1;
     MinMax solver_one = new MinMax();
     AlphaBeta solver_two = new AlphaBeta();
 
@@ -98,6 +98,7 @@ public class Screen {
         }
         computerScore = calculate_score(2);
     }
+
     int calculate_score(int player){
         int score = 0;
         for (int y = 0; y < 6; y++) {
