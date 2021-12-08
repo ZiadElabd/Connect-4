@@ -21,10 +21,11 @@ public class Game extends Canvas implements Runnable{
 
     private JFrame frame;
     List<JButton> buttons;
+    JButton start = new JButton("Start");
     JPanel panel = new JPanel();
     JLabel l1, l2;
     String[] types = {"MIN-MAX", "ALPHA-BETA"};
-    Integer[] depths = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    Integer[] depths = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
     JComboBox type = new JComboBox(types);
     JComboBox depth = new JComboBox(depths);
     private Screen screen;
@@ -46,7 +47,15 @@ public class Game extends Canvas implements Runnable{
             b1.setFocusable(false);
             b1.setFocusPainted(false);
             buttons.add(b1);
+            b1.setEnabled(false);
         }
+        start.setBounds(400, 580, 64, 22);
+        start.setFont(new Font("Arial", Font.ITALIC, 18));
+        start.setMargin(new Insets(0, 0, 0, 0));
+        start.setFocusable(false);
+        start.setFocusPainted(false);
+        start.addActionListener(e -> this.startGame());
+        frame.add(start);
         screen = new Screen(width, height);
         buttons.forEach(frame::add);
         for (int i = 0; i < buttons.size(); i++){
@@ -117,9 +126,13 @@ public class Game extends Canvas implements Runnable{
         bs.show();
     }
 
-    private void disableComponents() {
+    private void startGame() {
+        buttons.forEach(e -> e.setEnabled(true));
+        screen.gameType = this.type.getSelectedIndex();
+        screen.depth = (int) this.depth.getSelectedItem();
         this.type.setEnabled(false);
         this.depth.setEnabled(false);
+        start.setEnabled(false);
     }
 
     public static void main(String[] args) {
