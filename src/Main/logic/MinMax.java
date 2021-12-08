@@ -2,50 +2,48 @@ package Main.logic;
 
 import Main.logic.Heuristic;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 import javax.sound.midi.Soundbank;
 
 public class MinMax {
 
-    // to print the tree
-    class treeNode {
-
-        int[][] state;
-        int lev;
-
-        treeNode(int state[][], int lev) {
-            this.lev = lev;
-            this.state = state;
-        }
-    }
-
     class node {
 
+        int[][] state;
         int score;
         int best;
 
-        node(int score, int best) {
+        node(int score, int best, int[][] state) {
             this.best = best;
             this.score = score;
+            this.state = state ; 
         }
+
     }
 
     // tree nodes to be printed
-    private ArrayList<treeNode> tree = new ArrayList<>();
+    private Hashtable<Integer, ArrayList<node>> tree = new Hashtable<>();
 
     // map each state to its best cost
     private HashMap<String, node> vis = new HashMap<>();
 
-    private int solve(int[][] state, int depth, boolean maxPlayer) {
+    private int solve(int[][] state, int depth, boolean maxPlayer, int lev) {
 
-        if (depth == 0 || isTerminal(state))
-            return Heuristic.evaluate(state);
+        if (depth == 0 || isTerminal(state)) {
+            int cost = Heuristic.evaluate(state);
+            tree.get(lev).add(new node(cost, -1, state));
+            return cost;
+        }
 
         String stateAsString = stateGenerator(state);
 
-        if (vis.containsKey(stateAsString))
+        if (vis.containsKey(stateAsString)) {
+            tree.get(lev).add(vis.get(stateAsString));
             return vis.get(stateAsString).score;
+        }
 
         int res, best = -1;
 
@@ -55,7 +53,7 @@ public class MinMax {
                 int[][] nextState = getNextState(state, i, true);
                 if (nextState == null)
                     continue;
-                int cost = solve(nextState, depth - 1, false);
+                int cost = solve(nextState, depth - 1, false, lev + 1);
                 if (cost > res) {
                     res = cost;
                     best = i;
@@ -68,14 +66,16 @@ public class MinMax {
                 int[][] nextState = getNextState(state, i, false);
                 if (nextState == null)
                     continue;
-                int cost = solve(nextState, depth - 1, true);
+                int cost = solve(nextState, depth - 1, true, lev + 1);
                 if (cost < res) {
                     res = cost;
                     best = i;
                 }
             }
         }
-        vis.put(stateAsString, new node(res, best));
+        node info = new node(res, best, state);
+        vis.put(stateAsString, info);
+        tree.get(lev).add(info);
         return res;
 
     }
@@ -117,25 +117,30 @@ public class MinMax {
         return true;
     }
 
-    public ArrayList<treeNode> getTree() {
-        return this.tree;
-    }
-
     public int[][] solveAPI(int[][] state, int depth, boolean maxPlayer) {
-        solve(state, depth, maxPlayer);
-        System.out.println("best move is " + vis.get(stateGenerator(state)).best);
-        return getNextState(state, vis.get(stateGenerator(state)).best, false);
+        for (int i = 0; i <= depth; i++) {
+            tree.put(i, new ArrayList<>());
+        }
+        solve(state, depth, maxPlayer, 0);
+        int[][] ret = getNextState(state, vis.get(stateGenerator(state)).best, false);
+
+        System.out.println("-----------");
+        for (int i = 0; i <= depth; i++) {
+            int size = tree.get(i).size();
+            for (int j = 0; j < 6; j++) {
+                for (int k = 0; k < size; k++) {
+                    System.out.print(Arrays.toString(tree.get(i).get(k).state[j]) + " | ");
+                }
+                System.out.println();
+            }
+            for (int k = 0; k < size; k++) {
+                System.out.print(
+                        tree.get(i).get(k).score + " " + tree.get(i).get(k).best + "                  | ");
+            }
+            System.out.println("\n" + "*******nextLevel**********");
+        }
+
+        return ret;
     }
 
-    public static void main(String[] args) {
-        int[][] state = new int[6][7];
-        MinMax solver = new MinMax();
-        state[5][0] = 1;
-        int[][] nextMove = solver.solveAPI(state, 9, false);
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++)
-                System.out.print(nextMove[i][j] + " ");
-            System.out.println();
-        }
-    }
 }

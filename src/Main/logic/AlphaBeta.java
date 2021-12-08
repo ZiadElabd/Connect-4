@@ -40,7 +40,7 @@ public class AlphaBeta {
         return result;
     }
 
-    public void  minmax(treeNode node,int depth,int alpha,int beta,boolean maxPlayer,int k){
+    public void minmax(treeNode node,int depth,int alpha,int beta,boolean maxPlayer,int k){
         tree.get(k-depth).add(node);
         if (depth==0||isTermial(node.state)) {
             node.heuristicValue=Heuristic.evaluate(node.state);
