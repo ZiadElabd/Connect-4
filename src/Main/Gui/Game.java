@@ -38,7 +38,7 @@ public class Game extends Canvas implements Runnable{
         // ComboBox
         type = new JComboBox(types);
         depth = new JComboBox();
-        for (int i = 1; i <= 13; i++) {
+        for (int i = 1; i <= 15; i++) {
             depth.addItem(i);
         }
 

@@ -4,6 +4,8 @@ package Main.Gui;
 import Main.logic.AlphaBeta;
 import Main.logic.MinMax;
 
+import java.util.Arrays;
+
 public class Screen {
     int humanScore = 0, computerScore = 0;
     public int width;
@@ -11,7 +13,7 @@ public class Screen {
     public int[] pixels;
     public int[][] tiles = new int[10][9];
     public int[][] grid = new int[6][7];
-    int gameType = 0;   // 0 -> minimax, 1 -> AlphaBeta
+    int gameType = 0;   // 0 -> Minimax, 1 -> AlphaBeta
     int depth = 1;
     MinMax solver_one = new MinMax();
     AlphaBeta solver_two = new AlphaBeta();
@@ -27,9 +29,7 @@ public class Screen {
 
     public void init(){
         for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
-                grid[i][j] = 0;
-            }
+            Arrays.fill(grid[i],0);
         }
         int[] temp_grid = SpriteSheet.grid.pixels;
         for (int y = 0; y < 10; y++) {
@@ -67,7 +67,7 @@ public class Screen {
                 if (color != 0xFFFF00FF)
                     pixels[xa + ya * width] = color;
                 else
-                    pixels[xa + ya * width] = 0xFF5c5aea;
+                    pixels[xa + ya * width] = 0xFF5C5AEA;
             }
         }
     }
@@ -89,13 +89,10 @@ public class Screen {
         }
         grid[i - 1][col] = 1;
         humanScore = calculate_score(1);
-        if (gameType == 0) {
-            System.out.println("MINIMAX");
+        if (gameType == 0)
             grid = solver_one.solveAPI(grid, this.depth, false);
-        } else {
-            System.out.println("ALPHABETA");
+        else
             grid = solver_two.slove(grid, this.depth);
-        }
         computerScore = calculate_score(2);
     }
 
