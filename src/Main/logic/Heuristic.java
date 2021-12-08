@@ -261,7 +261,7 @@ public class Heuristic {
 			}
 		}
 		
-		return score ;
+		return -score ;
 	}
 
 //    private static HashSet<String> set = new HashSet<>();

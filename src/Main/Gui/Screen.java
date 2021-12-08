@@ -88,19 +88,10 @@ public class Screen {
         grid[i - 1][col] = 1;
         humanScore = calculate_score(1);
         System.out.println("score: " + calculate_score(1) + " " + calculate_score(2));
-        System.out.println("bbbbbbb");
-        for (int k1 = 0; k1 < 6; k1++) {
-            for (int k2 = 0; k2 < 7; k2++) {
-                System.out.print(grid[k1][k2] + " ");
-            }
-            System.out.println();
-        }
         //grid = solver.solveAPI(grid, 10, false);
-        grid = solver_two.slove(grid, 7);
+        grid = solver_two.slove(grid, 9);
         computerScore = calculate_score(2);
         System.out.println("score: " + calculate_score(1) + " " + calculate_score(2));
-        System.out.println(grid.length);
-        System.out.println(grid[0].length);
 
     }
     int calculate_score(int player){
