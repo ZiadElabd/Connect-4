@@ -1,8 +1,7 @@
 # Connect-4
 
 # Using Minimax Algorithm to Make Connect 4 AI Agent
-![maxwin](https://user-images.githubusercontent.com/58531158/145482304-a425d63a-0452-4959-9d61-16098ef11ab3.PNG)
-![Alphawin](https://user-images.githubusercontent.com/58531158/145482370-bdfe7851-9e2c-46d2-8a49-f3a112af9a89.PNG)
+
 #heuristic:-
 Calculate score =  total points of computer – total points of players
 For every four neighboring  chips in the same row or  In the same column or Diagonally
@@ -15,6 +14,9 @@ For every four neighboring  chips in the same row or  In the same column or Diag
 -If two  chips are for the player and two are empty   subtract 500 to the score 
 -If  one  chip is for the computer and three are empty  add 200 to the score 
 -If one chip is for the player and three are empty  subtract 200 to the score
+
+![maxwin](https://user-images.githubusercontent.com/58531158/145482304-a425d63a-0452-4959-9d61-16098ef11ab3.PNG)
+![Alphawin](https://user-images.githubusercontent.com/58531158/145482370-bdfe7851-9e2c-46d2-8a49-f3a112af9a89.PNG)
 
 
  
