@@ -4,6 +4,7 @@ package Main.Gui;
 import Main.logic.AlphaBeta;
 import Main.logic.MinMax;
 
+import java.awt.*;
 import java.util.Arrays;
 
 public class Screen {
@@ -92,6 +93,15 @@ public class Screen {
         else
             grid = solver_two.slove(grid, this.depth);
         computerScore = calculate_score(2);
+        isTermial();
+    }
+
+    public void isTermial(){
+        for (int i = 0; i < 7; i++) {
+            if (grid[0][i] == 0)
+                return;
+        }
+        Game.running = false;
     }
 
     int calculate_score(int player){
