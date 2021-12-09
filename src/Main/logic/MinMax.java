@@ -135,7 +135,7 @@ public class MinMax {
             }
             for (int k = 0; k < size; k++) {
                 System.out.print(
-                        tree.get(i).get(k).score + " " + tree.get(i).get(k).best + "                  | ");
+                "value:" +tree.get(i).get(k).score + " " +"Move:"+tree.get(i).get(k).best + "    | ");
             }
             System.out.println("\n" + "*******nextLevel**********");
         }

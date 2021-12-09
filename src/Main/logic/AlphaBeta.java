@@ -4,7 +4,7 @@ import java.util.*;
 
 public class AlphaBeta {
     Hashtable<Integer,ArrayList<treeNode>> tree=new Hashtable<>();
-    Hashtable<String,Vistednode> visited=new Hashtable<>();
+    Hashtable<String,Vistednode> visited;
     class treeNode{
         int[][] state;
         int heuristicValue;
@@ -31,10 +31,11 @@ public class AlphaBeta {
         for (int i = 0; i <= depth; i++) {
             tree.put(i,new ArrayList<>());
         }
+        visited=new Hashtable<>();
         treeNode node=new treeNode(board,true);
         minmax(node,depth,Integer.MIN_VALUE,Integer.MAX_VALUE,false,depth);
         int[][] result=nextState(board,node.bestMove,false).state;
-       /* System.out.println("-----------");
+       System.out.println("-----------");
         for (int i = 0; i <=depth; i++) {
             int size=tree.get(i).size();
             for (int j = 0; j <6; j++) {
@@ -44,10 +45,10 @@ public class AlphaBeta {
                 System.out.println();
             }
             for (int k = 0; k < size; k++) {
-                System.out.print(tree.get(i).get(k).heuristicValue+" "+tree.get(i).get(k).bestMove+"                  | ");
+                System.out.print("Value:"+tree.get(i).get(k).heuristicValue+" Move:"+tree.get(i).get(k).bestMove+"   | ");
             }
             System.out.println("\n"+"*******nextLevel**********");
-        }*/
+        }
         return result;
     }
 
