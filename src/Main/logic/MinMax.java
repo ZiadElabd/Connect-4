@@ -121,6 +121,7 @@ public class MinMax {
         for (int i = 0; i <= depth; i++) {
             tree.put(i, new ArrayList<>());
         }
+	vis.clear();
         solve(state, depth, maxPlayer, 0);
         int[][] ret = getNextState(state, vis.get(stateGenerator(state)).best, false);
 
