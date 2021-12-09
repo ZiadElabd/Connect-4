@@ -13,6 +13,7 @@ public class Game extends Canvas implements Runnable{
     private final int width = 9 * 32;
     private final int height = 10 * 32;
     public static String title = "Connect 4";
+    public static boolean running = true;
     String[] types = {"MIN-MAX", "ALPHA-BETA"};
 
 
@@ -119,6 +120,15 @@ public class Game extends Canvas implements Runnable{
         g.setFont(new Font("Verdana", Font.BOLD , 16));
         g.drawString("Human : Computer ", 45 , 550);
         g.drawString(screen.humanScore + " : " + screen.computerScore, 97 , 570);
+        if (!this.running){
+            g.setFont(new Font("Verdana", Font.BOLD , 25));
+            if (screen.humanScore > screen.computerScore)
+                g.drawString("YOU WON!!", 220 , 50);
+            else if(screen.humanScore < screen.computerScore)
+                g.drawString("YOU LOSE!!", 220 , 50);
+            else
+                g.drawString("DRAW!!", 220 , 50);
+        }
     }
 
     private void startGame() {
