@@ -123,7 +123,7 @@ public class MinMax {
         for (int i = 0; i <= depth; i++) {
             tree.put(i, new ArrayList<>());
         }
-	vis.clear();
+	   vis=new HashMap<>();
         long startTime = System.currentTimeMillis();
         solve(state, depth, maxPlayer, 0);
         long timeElapsed = System.currentTimeMillis() - startTime;
