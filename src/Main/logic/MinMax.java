@@ -125,7 +125,7 @@ public class MinMax {
         solve(state, depth, maxPlayer, 0);
         int[][] ret = getNextState(state, vis.get(stateGenerator(state)).best, false);
 
-        System.out.println("-----------");
+        System.out.println("----------------NEW Game-------------------");
         for (int i = 0; i <= depth; i++) {
             int size = tree.get(i).size();
             for (int j = 0; j < 6; j++) {
