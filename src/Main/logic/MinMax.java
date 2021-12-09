@@ -124,21 +124,21 @@ public class MinMax {
         solve(state, depth, maxPlayer, 0);
         int[][] ret = getNextState(state, vis.get(stateGenerator(state)).best, false);
 
-        System.out.println("-----------");
-        for (int i = 0; i <= depth; i++) {
-            int size = tree.get(i).size();
-            for (int j = 0; j < 6; j++) {
-                for (int k = 0; k < size; k++) {
-                    System.out.print(Arrays.toString(tree.get(i).get(k).state[j]) + " | ");
-                }
-                System.out.println();
-            }
-            for (int k = 0; k < size; k++) {
-                System.out.print(
-                        tree.get(i).get(k).score + " " + tree.get(i).get(k).best + "                  | ");
-            }
-            System.out.println("\n" + "*******nextLevel**********");
-        }
+        // System.out.println("-----------");
+        // for (int i = 0; i <= depth; i++) {
+        //     int size = tree.get(i).size();
+        //     for (int j = 0; j < 6; j++) {
+        //         for (int k = 0; k < size; k++) {
+        //             System.out.print(Arrays.toString(tree.get(i).get(k).state[j]) + " | ");
+        //         }
+        //         System.out.println();
+        //     }
+        //     for (int k = 0; k < size; k++) {
+        //         System.out.print(
+        //                 tree.get(i).get(k).score + " " + tree.get(i).get(k).best + "                  | ");
+        //     }
+        //     System.out.println("\n" + "*******nextLevel**********");
+        // }
 
         return ret;
     }
