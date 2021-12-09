@@ -5,6 +5,7 @@ import java.util.*;
 public class AlphaBeta {
     Hashtable<Integer,ArrayList<treeNode>> tree=new Hashtable<>();
     Hashtable<String,Vistednode> visited;
+    int count=0;
     class treeNode{
         int[][] state;
         int heuristicValue;
@@ -28,14 +29,17 @@ public class AlphaBeta {
         }
     }
     public int[][] slove(int[][] board,int depth){
+        count=0;
         for (int i = 0; i <= depth; i++) {
             tree.put(i,new ArrayList<>());
         }
         visited=new Hashtable<>();
         treeNode node=new treeNode(board,true);
+        long startTime = System.currentTimeMillis();
         minmax(node,depth,Integer.MIN_VALUE,Integer.MAX_VALUE,false,depth);
+        long timeElapsed = System.currentTimeMillis() - startTime;
         int[][] result=nextState(board,node.bestMove,false).state;
-       System.out.println("----------------------NEW Game------------------------------");
+      /* System.out.println("----------------------NEW Game------------------------------");
         for (int i = 0; i <=depth; i++) {
             int size=tree.get(i).size();
             for (int j = 0; j <6; j++) {
@@ -45,15 +49,17 @@ public class AlphaBeta {
                 System.out.println();
             }
             for (int k = 0; k < size; k++) {
-                System.out.print("Value:"+tree.get(i).get(k).heuristicValue+" Move:"+tree.get(i).get(k).bestMove+"   | ");
+                System.out.print("Value:"+tree.get(i).get(k).heuristicValue+" Move:"+tree.get(i).get(k).bestMove+" "   | ");
             }
             System.out.println("\n"+"*******nextLevel**********");
-        }
+        }*/
+        System.out.println("Time:"+timeElapsed+" Nodes:"+count);
         return result;
     }
 
     public void minmax(treeNode node,int depth,int alpha,int beta,boolean maxPlayer,int k){
         tree.get(k-depth).add(node);
+        count++;
         if (depth==0||isTermial(node.state)) {
             node.heuristicValue=Heuristic.evaluate(node.state);
             return ;
@@ -99,7 +105,7 @@ public class AlphaBeta {
     }
 
     private boolean isTermial(int[][] board){
-        for (int i = 0; i < board.length; i++) {
+        for (int i=0; i< board.length; i--) {
             for (int j = 0; j < board[0].length; j++) {
                 if(board[i][j]==0) return false;
             }
@@ -120,7 +126,7 @@ public class AlphaBeta {
         int ret[][] = new int[6][7];
         for (int i = 0; i < 6; i++)
             for (int j = 0; j < 7; j++)
-                ret[i][j] = state[i][j];
+                ret[i][j] =state[i][j];
         return ret;
     }
     private String stateToString(int[][] state){

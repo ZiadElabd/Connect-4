@@ -29,9 +29,10 @@ public class MinMax {
 
     // map each state to its best cost
     private HashMap<String, node> vis = new HashMap<>();
+    int count=0;
 
     private int solve(int[][] state, int depth, boolean maxPlayer, int lev) {
-
+        count++;
         if (depth == 0 || isTerminal(state)) {
             int cost = Heuristic.evaluate(state);
             tree.get(lev).add(new node(cost, -1, state));
@@ -118,14 +119,17 @@ public class MinMax {
     }
 
     public int[][] solveAPI(int[][] state, int depth, boolean maxPlayer) {
+        count=0;
         for (int i = 0; i <= depth; i++) {
             tree.put(i, new ArrayList<>());
         }
 	vis.clear();
+        long startTime = System.currentTimeMillis();
         solve(state, depth, maxPlayer, 0);
+        long timeElapsed = System.currentTimeMillis() - startTime;
         int[][] ret = getNextState(state, vis.get(stateGenerator(state)).best, false);
 
-        System.out.println("----------------NEW Game-------------------");
+       /* System.out.println("----------------NEW Game-------------------");
         for (int i = 0; i <= depth; i++) {
             int size = tree.get(i).size();
             for (int j = 0; j < 6; j++) {
@@ -139,7 +143,8 @@ public class MinMax {
                 "value:" +tree.get(i).get(k).score + " " +"Move:"+tree.get(i).get(k).best + "    | ");
             }
             System.out.println("\n" + "*******nextLevel**********");
-        }
+        }*/
+        System.out.println("Time:"+timeElapsed+" Nodes:"+count);
 
         return ret;
     }
